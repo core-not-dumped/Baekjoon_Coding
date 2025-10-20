@@ -1,0 +1,140 @@
+1. 끝나지 않는 인풋을 받는경우
+while True:
+    try:
+        n = int(input())
+    except EOFError:
+        break
+사용
+
+2. 빠른 입출력
+import sys
+input = sys.stdin.read
+print = sys.stdout.write
+data = input().split()
+output('\n'.join(str(res)) + '\n')
+
+
+3. 빠른 입출력 쉬운버전
+import sys
+input = sys.stdin.readline
+or
+input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
+
+
+4. input 띄어쓰기 없는거 받기
+n = int(input())
+board = [list(input().strip()) for _ in range(n)]
+
+
+5. list sorting하기
+list.sort()
+list = sorted(list)
+
+
+6. bisect
+bisect_left -> 같은값중에 가장 왼쪽
+bisect_right -> 같은값중에 가장 오른쪽 + 1
+
+
+7. for문에 else붙이기
+for문에 else를 붙이면 for문이 다돌면 else문에 들어감
+중간에 break되면 else에 들어가지 않음
+(while, else도 사용가능함)
+
+
+8. any() / all()
+nums = [1,2,3,4]
+print(any(n%2==0 for n in nums))  # True (하나라도 True)
+print(all(n>0 for n in nums))     # True (모두 True)
+
+
+9. functools.cache / lru_cache
+재귀에서 메모이제이션 쉽게 적용
+from functools import cache
+@cache
+def fib(n):
+    if n < 2: return n
+    return fib(n-1)+fib(n-2)
+print(fib(100))  # 재귀인데도 빠름
+
+
+10. 문자열 순열/조합 & itertools 트릭
+- permutations
+from itertools import permutations
+s = "ABC"
+perm = list(permutations(s, 2))  # 길이 2 순열
+print(perm)
+# 출력: [('A','B'), ('A','C'), ('B','A'), ('B','C'), ('C','A'), ('C','B')]
+list(permutations(s))  
+# [('A','B','C'), ('A','C','B'), ('B','A','C'), ('B','C','A'), ('C','A','B'), ('C','B','A')]
+
+- combinations
+from itertools import combinations
+s = "ABC"
+comb = list(combinations(s, 2))  # 길이 2 조합
+print(comb)
+# 출력: [('A','B'), ('A','C'), ('B','C')]
+
+- product
+from itertools import product
+s = "AB"
+p = list(product(s, repeat=2))  # 두 번 뽑는 모든 경우
+print(p)
+# 출력: [('A','A'), ('A','B'), ('B','A'), ('B','B')]
+
+a = [1,2]
+b = ['X','Y']
+list(product(a,b))
+# [(1,'X'), (1,'Y'), (2,'X'), (2,'Y')]
+
+
+
+11.다차원 리스트 초기화 주의
+# ❌ 이렇게 하면 얕은 복사
+a = [[0]*3]*3
+a[0][0] = 1
+print(a)  # [[1,0,0],[1,0,0],[1,0,0]]
+# ✅ 이렇게 해야 함
+a = [[0]*3 for _ in range(3)]
+
+
+12. 리스트 연산 속도 차이
++로 리스트 합치기보다 extend가 빠름
+lst = [1,2,3]
+lst += [4,5]  # 새로운 리스트 생성
+lst.extend([4,5])  # 기존 리스트에 추가 → 더 빠름
+
+
+13.
+for l in res:   print(*l)
+이런식으로 2차원 list를 예쁘게 출력가능 element띄어쓰기로
+
+
+14.
+split은 띄어쓰기, 엔터로 나눔
+strip은 한글자씩 나눔
+
+
+15.
+list 복사해서 넣는법
+a.append(l[:])
+
+
+16. tree dp
+def dfs(u, parent):
+    # ① 현재 노드 초기화
+    dp[u] = 초기값
+    
+    # ② 모든 자식 방문
+    for v in tree[u]:
+        if v == parent:
+            continue
+        dfs(v, u)
+        
+        # ③ 자식의 dp값을 이용해 dp[u] 갱신
+        dp[u] = f(dp[u], dp[v])
+
+
+17. dp를 이용할 때, 큰 값을 넣어야 한다면 dict이용
+
+18. from math import comb로 combination값 쉽게 구할 수 있음
